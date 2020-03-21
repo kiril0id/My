@@ -12,6 +12,7 @@ namespace Fitnes.BL.Controller
         public List<User> User { get; }
 
         public User CurrentUser { get; }
+        public bool IsNewUser { get; } = false;
         public UserController(string username)
         {
             if (string.IsNullOrWhiteSpace(username))
@@ -24,16 +25,33 @@ namespace Fitnes.BL.Controller
             {
                 CurrentUser = new User(username);
                 User.Add(CurrentUser);
+                IsNewUser = true;
                 Save();
 
             }
            
            
         }
+
+        public void SetNewUserDate(string genderName, DateTime birthDate, double weight=1, double height=1)
+        {
+            //Проверка
+
+            CurrentUser.Gender = new Gender(genderName);
+            CurrentUser.BirthDate = birthDate;
+            CurrentUser.Weight = weight;
+            CurrentUser.Height = height;
+            Save();
+        }
+
+
+
+
+
         /// <summary>
         /// Сохранение в файл
         /// </summary>
-        private  void Save()
+        public   void Save()
         {
             var formator = new BinaryFormatter();
             using (var fileStream = new FileStream("users.dat", FileMode.OpenOrCreate))
@@ -52,8 +70,9 @@ namespace Fitnes.BL.Controller
             using (var fileStream = new FileStream("users.dat", FileMode.OpenOrCreate))
             {
 
-                
-                if (!fileStream.CanSeek)
+
+
+                if (fileStream.Length!=0)
                 {
                     List<User> users = (List<User>)formator.Deserialize(fileStream);
                     return users;
@@ -61,8 +80,10 @@ namespace Fitnes.BL.Controller
                 else
                 {
                     return new List<User>();
-                } 
-                //TODO : что делать если пользователя не прочитали
+                }
+
+
+            
             }
 
         }

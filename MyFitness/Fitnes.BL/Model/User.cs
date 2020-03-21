@@ -18,11 +18,11 @@ namespace Fitnes.BL.Model
         /// <summary>
         /// Пол
         /// </summary>
-        public Gender gender { get; }
+        public Gender Gender { get; set; }
         /// <summary>
         /// Дата рождения
         /// </summary>
-        public DateTime BirthDate { get; }
+        public DateTime BirthDate { get; set; }
         /// <summary>
         /// Вес
         /// </summary>
@@ -76,7 +76,7 @@ namespace Fitnes.BL.Model
 
 
             Name = name;
-            this.gender = gender;
+            Gender = gender;
             BirthDate = birthDate;
             Weight = weight;
             Height = height;

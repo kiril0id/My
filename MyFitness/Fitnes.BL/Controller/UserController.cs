@@ -7,8 +7,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Fitnes.BL.Controller
 {
-    public class UserController
+    public class UserController : ControllerBase
     {
+        private const string USERS_FILE_NAME = "users.dat";
         public List<User> User { get; }
 
         public User CurrentUser { get; }
@@ -19,7 +20,7 @@ namespace Fitnes.BL.Controller
             {
                 throw new ArgumentNullException("Имя пользователя не может бысть пустым", nameof(username));
             }
-            User = GetUsersData();
+            User = GetUsersData();   
             CurrentUser = User.SingleOrDefault(u => u.Name == username);
             if (CurrentUser==null)
             {
@@ -48,44 +49,20 @@ namespace Fitnes.BL.Controller
 
 
 
-        /// <summary>
-        /// Сохранение в файл
-        /// </summary>
-        public   void Save()
-        {
-            var formator = new BinaryFormatter();
-            using (var fileStream = new FileStream("users.dat", FileMode.OpenOrCreate))
-            {
-                formator.Serialize(fileStream, User);
-            }
 
-        }
         /// <summary>
         /// Получить список пользователей
         /// </summary>
         /// <returns>Пользователь приложения </returns>
-        private List<User>  GetUsersData()
+        private List<User> GetUsersData()
         {
-            var formator = new BinaryFormatter();
-            using (var fileStream = new FileStream("users.dat", FileMode.OpenOrCreate))
-            {
-
-
-
-                if (fileStream.Length!=0)
-                {
-                    List<User> users = (List<User>)formator.Deserialize(fileStream);
-                    return users;
-                }
-                else
-                {
-                    return new List<User>();
-                }
-
-
-            
-            }
-
+            return Load<List<User>>(USERS_FILE_NAME) ?? new List<User>();
         }
+           
+        public void Save()
+        {
+            Save(USERS_FILE_NAME, User);
+        }
+        
     }
 }

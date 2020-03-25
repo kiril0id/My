@@ -35,15 +35,15 @@ namespace Fitnes.BL.Controller
             {
                 Foods.Add(food);
                 Eating.Add(food,weight);
-                Save();
+               
 
             }
             else
             {
                 Eating.Add(product, weight);
-                Save();
+                
             }
-
+            Save();
         }
         private List<Food> GetAllFoods()
         {
@@ -52,6 +52,7 @@ namespace Fitnes.BL.Controller
         private  void Save()
         {
             Save(FOODS_FILE_NAME, Foods);
+            Save(EATING_FILE_NAME, Eating);
         }
     }
 }
